@@ -1,7 +1,9 @@
 from graph import Graph
 class maze_generator:
-    def __init__(self):
+    def __init__(self,size):
         self.grid = Graph() 
+        self.grid.add_grid(size)
+    
 
     def add_grid(self,x,y):
         for row in range(x):
