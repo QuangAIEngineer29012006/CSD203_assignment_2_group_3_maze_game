@@ -10,10 +10,10 @@ class maze_generator:
             for col in range(x):
                 self.grid.add_vertex(f'{row}{col}')
 
-    def maze_generator(self):
+    def maze_generator(self,size):
         pass
 
 
-    def hunt_and_kill(self):
 
+    def hunt_and_kill(self):
         pass

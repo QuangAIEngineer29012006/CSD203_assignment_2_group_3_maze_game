@@ -1,4 +1,5 @@
 from vertex import Vertex
+import random
 from queue_home_made import Queue
 class Graph:
     def __init__(self):
@@ -74,14 +75,42 @@ class Graph:
         if col - 1 >= 0: 
             potential_connection_list.append(f"{row},{col-1}")
 
-        if row + 1 < size: 
+        if col + 1 < size: 
             potential_connection_list.append(f"{row},{col+1}")
        
+        return potential_connection_list
 
-    def hunt_and_kill(self, vertex):
+    def hunt_and_kill(self, vertex,size):
         visited = set()
         current = vertex
         visited.add(current)
+        while True:
+            neighbours = [neighbour for neighbour in self.get_potential_connection(current,size) if neighbour not in visited]
+            if neighbours:
+                next_vertex = random.choice(neighbours)
+                self.add_edge(current, next_vertex,1)
+                visited.add(next_vertex)
+                current =next_vertex
+            else:
+                found = False 
+                for cell in visited:
+                    neighbours =[n for n in self.get_potential_connection(cell,size) if n not in visited]
+                    if neighbours :
+                        next_vertex = random.choice(neighbours)
+                        self.add_edge(cell, next_vertex,1)
+                        visited.add(next_vertex)
+                        current = next_vertex 
+                        found = True
+                        break
+                if not found:
+                    break
+        
+
+
+
+
+
+       
 
 
 

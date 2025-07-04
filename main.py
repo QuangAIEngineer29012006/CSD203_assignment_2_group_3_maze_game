@@ -1,15 +1,7 @@
 from graph import Graph
-from mazegenerator import maze_generator
+
 g1 = Graph()
-
-matrix =[
-    [0, 0, 1, 1, 0, 1],
-    [0, 0, 1, 0, 1, 1],
-    [1, 1, 0, 0, 1, 0],
-    [0, 1, 0, 0, 0, 1],
-    [1, 0, 1, 0, 0, 0],
-    [0, 0, 1, 1, 0, 0],
-]
-
-g2 = maze_generator()
-
+size = 5
+g1.add_grid(size)
+g1.hunt_and_kill('0,0', size)
+g1.display()
