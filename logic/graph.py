@@ -1,9 +1,13 @@
-from vertex import Vertex
+from graphic.graphicForGame import draw_maze
+import pygame
+from logic.vertex import Vertex
 import random
-from queue_home_made import Queue
+from logic.queue_home_made import Queue
 class Graph:
     def __init__(self):
        self.vertices_list = {}
+       self.build_steps = []
+
 
     # function cơ bản của graph 
     def add_vertex(self, key):
@@ -17,6 +21,7 @@ class Graph:
         if v2 not in self.vertices_list:
             self.add_vertex(v2)
         self.vertices_list[v1].add_neighbor(self.vertices_list[v2], weight)
+        self.vertices_list[v2].add_neighbor(self.vertices_list[v1], weight)
 
     def display(self):
         for i in self.vertices_list:
@@ -27,15 +32,17 @@ class Graph:
     def bfs(self, start):
         visted = set()
         q = Queue()
-        q.enqueue(start)
+        q.enqueue(self.vertices_list[start])
         visted.add(start)
-        while q.size > 0:
+        while not q.isEmpty():
             current = q.dequeue()
             print(f"{current.key} ", end = '')
             for neighbor in current.connected_to:
                 if neighbor not in visted:
-                    q.enqueue(neighbor)
+                    q.enqueue(self.vertices_list[start])
                     visted.add(neighbor.key)
+    def dfg(self,start):
+        pass
 
 
     ## function mở rộng thêm, đọc ma trận ( hứng lên cho vào ) 
@@ -89,6 +96,7 @@ class Graph:
             if neighbours:
                 next_vertex = random.choice(neighbours)
                 self.add_edge(current, next_vertex,1)
+                self.build_steps.append((current, next_vertex))
                 visited.add(next_vertex)
                 current =next_vertex
             else:
@@ -99,33 +107,10 @@ class Graph:
                         next_vertex = random.choice(neighbours)
                         self.add_edge(cell, next_vertex,1)
                         visited.add(next_vertex)
+                        self.build_steps.append((current, next_vertex))
                         current = next_vertex 
                         found = True
                         break
                 if not found:
                     break
-        
-
-
-
-
-
-       
-
-
-
-
-
-
-
-
-
-        
-
-
-
-
-    
-
-
-
+            

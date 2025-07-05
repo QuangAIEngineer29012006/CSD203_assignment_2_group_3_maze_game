@@ -4,6 +4,8 @@ class Queue:
         self.data = []
         self.size = 0
         
+    def isEmpty(self):
+        return self.size ==0
     def enqueue(self,t):
         heapq.heappush(self.data, t)
         self.size +=1

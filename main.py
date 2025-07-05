@@ -1,7 +1,8 @@
-from graph import Graph
+from logic.graph import Graph
+from logic.mazegenerator import maze_generator
+from graphic.graphicForGame import draw_maze
 
-g1 = Graph()
-size = 5
-g1.add_grid(size)
-g1.hunt_and_kill('0,0', size)
-g1.display()
+g1 = maze_generator()
+g2 = g1.maze_generator_hunt_and_kill(20)
+draw_maze(g2,20,20)
+
