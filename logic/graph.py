@@ -107,10 +107,60 @@ class Graph:
                         next_vertex = random.choice(neighbours)
                         self.add_edge(cell, next_vertex,1)
                         visited.add(next_vertex)
-                        self.build_steps.append((current, next_vertex))
+                        self.build_steps.append((cell, next_vertex))
                         current = next_vertex 
                         found = True
                         break
                 if not found:
                     break
+    def prim(self, start, size):
+        visited = set()
+        visited.add(start)
+        # 
+        frontier = []
+
+       
+        for neighbor in self.get_potential_connection(start, size):
+            frontier.append((start, neighbor))
+
+        while frontier:
+            cell, neighbor = random.choice(frontier)
+            frontier.remove((cell, neighbor))
+
+            if neighbor not in visited:
+                self.add_edge(cell, neighbor, 1)
+                self.build_steps.append((cell, neighbor))
+                visited.add(neighbor)
+
+                for next_neighbor in self.get_potential_connection(neighbor, size):
+                    if next_neighbor not in visited:
+                        frontier.append((neighbor, next_neighbor))
+
+    def dfs(self,vertex,size, visited = None): ##recursive backtracker
+        if visited == None:
+            visited = set()
+        visited.add(vertex)
+        potential = self.get_potential_connection(vertex,size)
+        random.shuffle(potential)
+        for i in potential:
+            if i not in visited:
+                self.add_edge(vertex,i,1)
+                self.build_steps.append((vertex,i))
+    def A_star(self): #tam
+        pass
+    def kurskal(self): #vinh
+        pass
+    def wilson(self):
+        pass
+
+    def origin_shift(self):
+        pass
+
+
+        
+
+
+        
+
+
             

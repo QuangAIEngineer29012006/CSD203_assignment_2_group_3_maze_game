@@ -16,11 +16,19 @@ class maze_generator:
         maze.hunt_and_kill(vertex, size)
         return maze
 
-    def maze_generator_bfs(self,size):
+    def maze_generator_dfs(self,size):
         maze = Graph()
         col = random.randint(1,size)
         row = random.randint(1,size)
         vertex = f'{row},{col}'
         maze.add_grid(size)
-        maze.bfs(vertex)
+        maze.dfs(vertex,size)
+        return maze
+    def maze_generateor_prim(self,size):
+        maze = Graph()
+        col = random.randint(1,size)
+        row = random.randint(1,size)
+        vertex = f'{row},{col}'
+        maze.add_grid(size)
+        maze.prim(vertex,size)
         return maze
