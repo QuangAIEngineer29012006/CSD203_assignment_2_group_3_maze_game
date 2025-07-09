@@ -107,15 +107,14 @@ class Graph:
                 self.build_steps.append((vertex,i))
     def A_star(self): #tam
         pass
-    def kurskal(self): #vinh
+    def kurskal(self,size): #vinh
         pass
-    def wilson(self, size):
+    def wilson(self,root, size):
         self.add_grid(size)
         all_cells = [f"{i},{j}" for i in range(size) for j in range(size)]
         in_tree = set()
 
         # Chọn ngẫu nhiên một đỉnh làm gốc
-        root = random.choice(all_cells)
         in_tree.add(root)
         all_cells.remove(root)
 
@@ -155,7 +154,4 @@ class Graph:
 
     def origin_shift(self):
         pass
-
-
-
-
+    

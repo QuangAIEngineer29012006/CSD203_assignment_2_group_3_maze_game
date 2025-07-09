@@ -5,7 +5,7 @@ from logic.mazegenerator import maze_generator
 from graphic.core import init_window
 from graphic.entity import Player
 from graphic.entity import Ghost
-
+# draw raw grid 
 def draw_grid(screen, size, cell_size, color=(200, 200, 200)):
     for row in range(size):
         for col in range(size):
@@ -13,7 +13,7 @@ def draw_grid(screen, size, cell_size, color=(200, 200, 200)):
             y = row * cell_size
             pygame.draw.rect(screen, color, (x, y, cell_size, cell_size), 1)
     
-
+#draw maze based on graph structure
 def draw_maze(screen, graph, size, cell_size, wall_color=(0, 0, 0), bg_color=(255, 255, 255), safe_places=None):
     screen.fill(bg_color)
     if safe_places is None:
@@ -41,7 +41,6 @@ def draw_maze(screen, graph, size, cell_size, wall_color=(0, 0, 0), bg_color=(25
                 pygame.draw.line(screen, wall_color, (x + cell_size, y), (x + cell_size, y + cell_size), 2)
 
 # Draw the player at a given position
-
 def draw_player(screen, x, y, cell_size, color=(255,0,0)):
     px = x * cell_size + cell_size // 2
     py = y * cell_size + cell_size // 2
@@ -58,18 +57,11 @@ def draw_exit(screen, x, y, cell_size, color=(0,0,255)):
     ex = x * cell_size + cell_size // 2
     ey = y * cell_size + cell_size // 2
     pygame.draw.circle(screen, color, (ex, ey), cell_size // 4)
-
+#draw safe places, when play reach these places, they are safe from ghost
 def draw_safe_places(screen, safe_places, cell_size, color=(0, 255, 0)):
     for y, x in safe_places:
         pygame.draw.rect(screen, color, (x * cell_size + 2, y * cell_size + 2, cell_size - 4, cell_size - 4))
 
-def get_random_safe_places(size, count=5):
-    safe_places = set()
-    while len(safe_places) < count:
-        y = random.randint(0, size-1)
-        x = random.randint(0, size-1)
-        safe_places.add((y, x))
-    return list(safe_places)
 
 def draw_maze_animation(screen, graph, size, cell_size, build_steps, wall_color=(0,0,0), bg_color=(255,255,255), delay=0.05):
     import time
