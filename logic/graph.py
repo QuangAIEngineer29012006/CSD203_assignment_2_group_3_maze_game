@@ -1,8 +1,5 @@
-from graphic.graphicForGame import draw_maze
 import pygame
-from logic.vertex import Vertex
 import random
-from logic.queue_home_made import Queue
 class Graph:
     def __init__(self):
        self.vertices_list = {}
@@ -11,58 +8,20 @@ class Graph:
 
     # function cơ bản của graph 
     def add_vertex(self, key):
-        new_vertex = Vertex(key) 
         if key not in self.vertices_list:
-            self.vertices_list[key] = new_vertex 
+            self.vertices_list[key] = {} 
 
     def add_edge(self,v1, v2, weight):
         if v1 not in self.vertices_list:
             self.add_vertex(v1)
         if v2 not in self.vertices_list:
             self.add_vertex(v2)
-        self.vertices_list[v1].add_neighbor(self.vertices_list[v2], weight)
-        self.vertices_list[v2].add_neighbor(self.vertices_list[v1], weight)
-
-    def display(self):
-        for i in self.vertices_list:
-            print(f'{i}: ',end ="")
-            for neighbor in self.vertices_list[i].connected_to:
-                print(neighbor.key, end = ' ')
-            print()
-    def bfs(self, start):
-        visted = set()
-        q = Queue()
-        q.enqueue(self.vertices_list[start])
-        visted.add(start)
-        while not q.isEmpty():
-            current = q.dequeue()
-            print(f"{current.key} ", end = '')
-            for neighbor in current.connected_to:
-                if neighbor not in visted:
-                    q.enqueue(self.vertices_list[start])
-                    visted.add(neighbor.key)
-    def dfg(self,start):
-        pass
+        self.vertices_list[v1][v2] = weight
+        self.vertices_list[v2][v1] = weight
+    def is_neighbour(self, v1, v2):
+        return v2 in self.vertices_list[v1]
 
 
-    ## function mở rộng thêm, đọc ma trận ( hứng lên cho vào ) 
-    def int_to_char(self,i):
-        return chr(i % 26 +65)
-    def char_to_int(self,c):
-        return ord(c.upper()) -65
-
-    def read_matrix(self, adj_matrix):
-        for i in range(len(adj_matrix)):
-            u = self.int_to_char(i)
-            new_vertice = Vertex(self.int_to_char(i))
-            self.vertices_list[u] = new_vertice
-            for j in range(len(adj_matrix[i])): 
-                v = self.int_to_char(j)
-                if adj_matrix[i][j] != 0:
-                    self.add_edge(u,v, adj_matrix[i][j])
-    
-    
-    # bắt đầu function mở rộng 
     # tạo grid để bắt đầu tạo ma trận
     def add_grid(self,x,):
         for row in range(x):
@@ -124,8 +83,8 @@ class Graph:
             frontier.append((start, neighbor))
 
         while frontier:
-            cell, neighbor = random.choice(frontier)
-            frontier.remove((cell, neighbor))
+            idx = random.randrange(len(frontier))
+            cell, neighbor = frontier.pop(idx)
 
             if neighbor not in visited:
                 self.add_edge(cell, neighbor, 1)
@@ -157,10 +116,5 @@ class Graph:
         pass
 
 
-        
 
 
-        
-
-
-            

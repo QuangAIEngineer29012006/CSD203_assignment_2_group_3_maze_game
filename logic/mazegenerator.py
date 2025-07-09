@@ -24,7 +24,7 @@ class maze_generator:
         maze.add_grid(size)
         maze.dfs(vertex,size)
         return maze
-    def maze_generateor_prim(self,size):
+    def maze_generator_prim(self,size):
         maze = Graph()
         col = random.randint(1,size)
         row = random.randint(1,size)
