@@ -9,8 +9,8 @@ from graphic.init import game_loop
 from graphic.logicInGame import get_random_safe_places
 
 # Config
-MAZE_SIZE = 10  # Default size
-ALGORITHM = 'prim'  # Default algorithm
+MAZE_SIZE = 20  # Default size
+ALGORITHM = 'wilson'  # Default algorithm
 CELL_SIZE = 40
 WINDOW_MARGIN = 20
 
@@ -33,9 +33,12 @@ build_steps = getattr(graph, 'build_steps', None)
 win_size = MAZE_SIZE * CELL_SIZE
 screen = init_window(win_size, win_size, f"Maze Game - {ALGORITHM}")
 
+# Generate safe places
+safe_places = get_random_safe_places(MAZE_SIZE, count=10)
+
 # Draw maze animation if build_steps exist
 if build_steps:
     draw_maze_animation(screen, graph, MAZE_SIZE, CELL_SIZE, build_steps)
 
 # Start the main game loop (handles player, ghost, win/lose)
-game_loop(screen, graph, MAZE_SIZE, CELL_SIZE)
+game_loop(screen, graph, MAZE_SIZE, CELL_SIZE, safe_places=safe_places)
