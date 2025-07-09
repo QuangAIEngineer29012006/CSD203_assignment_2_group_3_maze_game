@@ -109,8 +109,49 @@ class Graph:
         pass
     def kurskal(self): #vinh
         pass
-    def wilson(self):
-        pass
+    def wilson(self, size):
+        self.add_grid(size)
+        all_cells = [f"{i},{j}" for i in range(size) for j in range(size)]
+        in_tree = set()
+
+        # Chọn ngẫu nhiên một đỉnh làm gốc
+        root = random.choice(all_cells)
+        in_tree.add(root)
+        all_cells.remove(root)
+
+        while all_cells:
+            # Chọn một đỉnh chưa thuộc cây
+            walk_start = random.choice(all_cells)
+            walk = [walk_start]
+            visited_in_walk = {walk_start}
+
+            current = walk_start
+            while current not in in_tree:
+                neighbors = self.get_potential_connection(current, size)
+                next_cell = random.choice(neighbors)
+                # Loại bỏ vòng lặp: nếu đã đi qua next_cell thì cắt vòng
+                if next_cell in visited_in_walk:
+                    idx = walk.index(next_cell)
+                    walk = walk[:idx+1]
+                    visited_in_walk = set(walk)
+                else:
+                    walk.append(next_cell)
+                    visited_in_walk.add(next_cell)
+                current = next_cell
+            # Thêm đường đi (đã loại vòng) vào cây
+            for i in range(len(walk) - 1):
+                u = walk[i]
+                v = walk[i + 1]
+                self.add_edge(u, v, 1)
+                self.build_steps.append((u, v))
+                in_tree.add(u)
+                if u in all_cells:
+                    all_cells.remove(u)
+            # Đảm bảo cell cuối cùng cũng được thêm
+            if walk[-1] in all_cells:
+                all_cells.remove(walk[-1])
+            in_tree.add(walk[-1])
+
 
     def origin_shift(self):
         pass
