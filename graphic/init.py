@@ -22,7 +22,7 @@ def game_loop(screen, graph, size, cell_size, safe_places=None):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-        handle_player_input(player, graph, size)
+            handle_player_input(player, graph, size,event)
         # Only update ghosts every ghost_delay frames
         if ghost_timer == 0:
             for i, ghost in enumerate(ghosts):

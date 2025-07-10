@@ -152,6 +152,7 @@ class Graph:
             in_tree.add(walk[-1])
 
 
-    def origin_shift(self):
-        pass
+    
+        
+        
     

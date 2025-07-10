@@ -9,7 +9,7 @@ from logic.mazegenerator import maze_generator
 from graphic.core import init_window
 from graphic.entity import Player
 from graphic.entity import Ghost
-# draw raw grid 
+# draw raw grid
 def draw_grid(screen, size, cell_size, color=WALL_COLOR):
     # Only draw the outer border, not all cell borders, to avoid double-thick walls
     for i in range(size + 1):
@@ -79,6 +79,12 @@ def draw_maze_animation(screen, graph, size, cell_size, build_steps, wall_color=
     time.sleep(0.5)
     highlight_color = (255, 0, 0)  # Red
     for (cell1, cell2) in build_steps:
+        # Event handling: Process Pygame events to prevent crashes on alt-tab
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit() # Exit the program if the user closes the window during animation
+
         temp_graph.add_edge(cell1, cell2, 1)
         draw_maze(screen, temp_graph, size, cell_size, wall_color=wall_color, bg_color=bg_color)
         # Highlight the cell being carved
@@ -91,5 +97,33 @@ def draw_maze_animation(screen, graph, size, cell_size, build_steps, wall_color=
     draw_maze(screen, graph, size, cell_size, wall_color=wall_color, bg_color=bg_color)
     pygame.display.update()
 
+# New function to draw text on the screen
+def draw_text(screen, text, font_size, x, y, color=(0, 0, 0)):
+    font = pygame.font.Font(None, font_size)
+    text_surface = font.render(text, True, color)
+    text_rect = text_surface.get_rect(center=(x, y))
+    screen.blit(text_surface, text_rect)
+    return text_rect # Return the rect for click detection
 
+# New function for the main menu
+def main_menu(screen, screen_width, screen_height):
+    menu_running = True
+    while menu_running:
+        screen.fill(BG_COLOR) # Clear screen for menu
+        title_rect = draw_text(screen, "Maze Game", 72, screen_width // 2, screen_height // 4)
+        start_button_rect = draw_text(screen, "Start Game", 48, screen_width // 2, screen_height // 2)
+        exit_button_rect = draw_text(screen, "Exit", 48, screen_width // 2, screen_height // 2 + 70)
 
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if start_button_rect.collidepoint(event.pos):
+                    return "start" # User clicked Start Game
+                if exit_button_rect.collidepoint(event.pos):
+                    pygame.quit()
+                    quit()
+    return None # Should not be reached

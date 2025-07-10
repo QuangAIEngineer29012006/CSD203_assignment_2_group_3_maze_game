@@ -5,20 +5,28 @@ import random
 
 
 # Handles player input and updates player position
-def handle_player_input(player, graph, size):
-    keys = pygame.key.get_pressed()
+def handle_player_input(player, graph, size, event): # Added 'event' parameter
     next_x, next_y = player.pos_x, player.pos_y
-    if keys[pygame.K_UP] and player.pos_x > 0:
-        next_x -= 1
-    elif keys[pygame.K_DOWN] and player.pos_x < size - 1:
-        next_x += 1
-    elif keys[pygame.K_LEFT] and player.pos_y > 0:
-        next_y -= 1
-    elif keys[pygame.K_RIGHT] and player.pos_y < size - 1:
-        next_y += 1
+
+    if event.type == pygame.KEYDOWN: # Only process on key down event
+        if event.key == pygame.K_UP and player.pos_x > 0:
+            next_x -= 1
+        elif event.key == pygame.K_DOWN and player.pos_x < size - 1:
+            next_x += 1
+        elif event.key == pygame.K_LEFT and player.pos_y > 0:
+            next_y -= 1
+        elif event.key == pygame.K_RIGHT and player.pos_y < size - 1:
+            next_y += 1
+        else: # If it's not a directional key, no movement
+            return
+
     cell_cur = f"{player.pos_x},{player.pos_y}"
     cell_next = f"{next_x},{next_y}"
-    if cell_next in graph.vertices_list and graph.is_neighbour(cell_cur, cell_next):
+
+    # Only move if the target cell is different and a valid neighbor
+    if (next_x, next_y) != (player.pos_x, player.pos_y) and \
+        cell_next in graph.vertices_list and \
+        graph.is_neighbour(cell_cur, cell_next):
         player.pos_x, player.pos_y = next_x, next_y
 
 def bfs_path(graph, start, goal):
@@ -110,7 +118,6 @@ def update_ghost(ghost, player, graph, size, safe_places=None, target_dict=None,
             ghost.pos_x, ghost.pos_y = gx, gy
 
 def get_random_safe_places(size, count=20):
-    # Add fixed safe places at four corners, middle of each edge, center, four quarter-centers, two more near corners, and more at 1/3 and 2/3 positions
     fixed = set()
     fixed.add((0, 0))
     fixed.add((0, size-1))
@@ -142,3 +149,8 @@ def get_random_safe_places(size, count=20):
         x = random.randint(0, size-1)
         safe_places.add((y, x))
     return list(safe_places)
+
+
+            
+
+
