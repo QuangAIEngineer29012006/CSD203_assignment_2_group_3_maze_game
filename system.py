@@ -11,8 +11,8 @@ from graphic.logicInGame import get_random_safe_places
 # Config
 
 
-def start_game(ALGORITHM='wilson', MAZE_SIZE=20):
-    CELL_SIZE = 40
+def start_game(ALGORITHM='wilson', MAZE_SIZE=30):
+    CELL_SIZE = 30
     WINDOW_MARGIN = 20
 
     # Allow user to specify size and algorithm via command line

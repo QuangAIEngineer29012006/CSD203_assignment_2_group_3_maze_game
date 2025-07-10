@@ -1,9 +1,14 @@
 import pygame
 import random
 # Universal color variables
-BG_COLOR = (255, 255, 255)      # White background
-WALL_COLOR = (0, 0, 0)          # Black walls
-WALL_THICKNESS = 3  # Universal wall thickness
+BG_COLOR = (0,0,0)      # White background
+WALL_COLOR = (66, 245, 72)          
+WALL_THICKNESS = 4 # Universal wall thickness
+SAFE_PLACE_COLOR = (9, 0, 64)
+EXIT_COLOR = (0, 0, 255)        
+PLAYER_COLOR = (255, 215, 0)  
+Ghost_COLOR = 	(255, 0, 0)  
+generate_speed = 0.005 # Speed of maze generation animation
 from logic.graph import Graph
 from logic.mazegenerator import maze_generator
 from graphic.core import init_window
@@ -46,29 +51,29 @@ def draw_maze(screen, graph, size, cell_size, wall_color=WALL_COLOR, bg_color=BG
                 pygame.draw.line(screen, wall_color, (x + cell_size, y), (x + cell_size, y + cell_size), WALL_THICKNESS)
 
 # Draw the player at a given position
-def draw_player(screen, x, y, cell_size, color=(255,0,0)):
+def draw_player(screen, x, y, cell_size, color=PLAYER_COLOR):
     px = x * cell_size + cell_size // 2
     py = y * cell_size + cell_size // 2
     pygame.draw.circle(screen, color, (px, py), cell_size // 4)
 
 # Draw the ghost at a given position
-def draw_ghost(screen, x, y, cell_size, color=(0,255,255)):
+def draw_ghost(screen, x, y, cell_size, color=Ghost_COLOR):
     gx = x * cell_size + cell_size // 2
     gy = y * cell_size + cell_size // 2
     pygame.draw.circle(screen, color, (gx, gy), cell_size // 4)
 
 # Draw the exit
-def draw_exit(screen, x, y, cell_size, color=(0,0,255)):
+def draw_exit(screen, x, y, cell_size, exit_color=EXIT_COLOR):
     ex = x * cell_size + cell_size // 2
     ey = y * cell_size + cell_size // 2
-    pygame.draw.circle(screen, color, (ex, ey), cell_size // 4)
+    pygame.draw.circle(screen, exit_color, (ex, ey), cell_size // 4)
 #draw safe places, when play reach these places, they are safe from ghost
-def draw_safe_places(screen, safe_places, cell_size, color=(0, 255, 0)):
+def draw_safe_places(screen, safe_places, cell_size, SAFE_PLACE_COLOR=SAFE_PLACE_COLOR):
     for y, x in safe_places:
-        pygame.draw.rect(screen, color, (x * cell_size + 2, y * cell_size + 2, cell_size - 4, cell_size - 4))
+        pygame.draw.rect(screen, SAFE_PLACE_COLOR, (x * cell_size + 2, y * cell_size + 2, cell_size - 4, cell_size - 4))
 
 
-def draw_maze_animation(screen, graph, size, cell_size, build_steps, wall_color=WALL_COLOR, bg_color=BG_COLOR, delay=0.05):
+def draw_maze_animation(screen, graph, size, cell_size, build_steps, wall_color=WALL_COLOR, bg_color=BG_COLOR, delay=generate_speed):
     import time
     from logic.graph import Graph
     temp_graph = Graph()
@@ -76,7 +81,7 @@ def draw_maze_animation(screen, graph, size, cell_size, build_steps, wall_color=
     screen.fill(bg_color)
     draw_grid(screen, size, cell_size, color=wall_color)
     pygame.display.flip()
-    time.sleep(0.5)
+    time.sleep(0.5) #
     highlight_color = (255, 0, 0)  # Red
     for (cell1, cell2) in build_steps:
         # Event handling: Process Pygame events to prevent crashes on alt-tab
@@ -92,13 +97,13 @@ def draw_maze_animation(screen, graph, size, cell_size, build_steps, wall_color=
         x_from, y_from = col_from * cell_size, row_from * cell_size
         pygame.draw.rect(screen, highlight_color, (x_from+2, y_from+2, cell_size-4, cell_size-4))
         pygame.display.update()
-        time.sleep(delay)
+        time.sleep(delay) # 
     # Final redraw to ensure all walls are correct
     draw_maze(screen, graph, size, cell_size, wall_color=wall_color, bg_color=bg_color)
     pygame.display.update()
 
 # New function to draw text on the screen
-def draw_text(screen, text, font_size, x, y, color=(0, 0, 0)):
+def draw_text(screen, text, font_size, x, y, color=(215, 215, 215)):
     font = pygame.font.Font(None, font_size)
     text_surface = font.render(text, True, color)
     text_rect = text_surface.get_rect(center=(x, y))
