@@ -108,8 +108,10 @@ class Graph:
                 self.dfs(i,size,visited)
     def A_star(self): #tam
         pass
-    def kurskal(self,size): #vinh
+    def kurskal(self,size): #vinh        
         pass
+
+
     def wilson(self,root, size):
         self.add_grid(size)
         all_cells = [f"{i},{j}" for i in range(size) for j in range(size)]
@@ -153,7 +155,39 @@ class Graph:
             in_tree.add(walk[-1])
 
 
-    
+    def bfs_path(self, start, goal):
+        from collections import deque
+        queue = deque([[start]])
+        visited = set([start])
+        while queue:
+            path = queue.popleft()
+            node = path[-1]
+            if node == goal:
+                return path
+            for neighbor in self.vertices_list[node]:
+                nkey = neighbor
+                if nkey not in visited:
+                    visited.add(nkey)
+                    queue.append(path + [nkey])
+        return []
+    def dfs_path(self, start, goal):
+        stack = [[start]]
+        visited = set([start])
+        while stack:
+            path = stack.pop()
+            node = path[-1]
+            if node == goal:
+                return path
+            for neighbor in self.vertices_list[node]:
+                nkey = neighbor
+                if nkey not in visited:
+                    visited.add(nkey)
+                    stack.append(path + [nkey])
+        return []
         
+
+    def manhattan(self, pos1, pos2):
+        return abs(pos1[0] - pos2[0]) + abs(pos1[1] - pos2[1])
+            
+            
         
-    

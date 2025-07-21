@@ -2,6 +2,7 @@ import pygame
 from graphic.entity import Player, Ghost
 from graphic.draw import draw_maze, draw_player, draw_ghost, draw_exit
 import random
+from logic.graph import Graph
 
 
 # Handles player input and updates player position
@@ -29,38 +30,9 @@ def handle_player_input(player, graph, size, event): # Added 'event' parameter
         graph.is_neighbour(cell_cur, cell_next):
         player.pos_x, player.pos_y = next_x, next_y
 
-def bfs_path(graph, start, goal):
-    from collections import deque
-    queue = deque([[start]])
-    visited = set([start])
-    while queue:
-        path = queue.popleft()
-        node = path[-1]
-        if node == goal:
-            return path
-        for neighbor in graph.vertices_list[node]:
-            nkey = neighbor
-            if nkey not in visited:
-                visited.add(nkey)
-                queue.append(path + [nkey])
-    return []
-def dfs_path(graph, start, goal):
-    stack = [[start]]
-    visited = set([start])
-    while stack:
-        path = stack.pop()
-        node = path[-1]
-        if node == goal:
-            return path
-        for neighbor in graph.vertices_list[node]:
-            nkey = neighbor
-            if nkey not in visited:
-                visited.add(nkey)
-                stack.append(path + [nkey])
-    return []
+
 #distance to calculate manhattan distance between two points
-def manhattan(pos1, pos2):
-    return abs(pos1[0] - pos2[0]) + abs(pos1[1] - pos2[1])
+
 
 # Handles ghost movement logic
 def update_ghost(ghost, player, graph, size, safe_places=None, target_dict=None, ghost_index=None):
@@ -70,7 +42,7 @@ def update_ghost(ghost, player, graph, size, safe_places=None, target_dict=None,
         return f'{rand_x},{rand_y}'
     ghost_cell = f"{ghost.pos_x},{ghost.pos_y}"
     player_cell = f"{player.pos_x},{player.pos_y}"
-    dist = manhattan([ghost.pos_x, ghost.pos_y], [player.pos_x, player.pos_y])
+    dist = graph.manhattan([ghost.pos_x, ghost.pos_y], [player.pos_x, player.pos_y])
 
     # If player is in a safe place, always go random
     if safe_places and (player.pos_x, player.pos_y) in safe_places:
@@ -85,7 +57,7 @@ def update_ghost(ghost, player, graph, size, safe_places=None, target_dict=None,
             target = get_random_place(size)
             while target == ghost_cell:
                 target = get_random_place(size)
-        path = dfs_path(graph, ghost_cell, target)
+        path = graph.dfs_path(ghost_cell, target)
         if len(path) > 1:
             gx, gy = map(int, path[1].split(','))
             ghost.pos_x, ghost.pos_y = gx, gy
@@ -104,7 +76,7 @@ def update_ghost(ghost, player, graph, size, safe_places=None, target_dict=None,
             target = get_random_place(size)
             while target == ghost_cell:
                 target = get_random_place(size)
-        path = bfs_path(graph, ghost_cell, target)
+        path = graph.bfs_path( ghost_cell, target)
         if len(path) > 1:
             gx, gy = map(int, path[1].split(','))
             ghost.pos_x, ghost.pos_y = gx, gy
@@ -112,7 +84,7 @@ def update_ghost(ghost, player, graph, size, safe_places=None, target_dict=None,
         # Chase player
         if target_dict is not None and ghost_index is not None:
             target_dict[ghost_index] = None  # Reset target when chasing
-        path = bfs_path(graph, ghost_cell, player_cell)
+        path = graph.bfs_path( ghost_cell, player_cell)
         if len(path) > 1:
             gx, gy = map(int, path[1].split(','))
             ghost.pos_x, ghost.pos_y = gx, gy

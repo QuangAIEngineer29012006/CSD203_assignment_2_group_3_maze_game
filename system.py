@@ -17,15 +17,6 @@ def start_game(ALGORITHM='wilson', MAZE_SIZE=30):
 
     # Allow user to specify size and algorithm via command line
 
-    if len(sys.argv) > 1:
-        try:
-            MAZE_SIZE = int(sys.argv[1])
-        except ValueError:
-            print("Invalid size argument, using default.")
-    if len(sys.argv) > 2:
-        ALGORITHM = sys.argv[2]
-
-    # Init window
     win_size = MAZE_SIZE * CELL_SIZE
     screen = init_window(win_size, win_size, f"Maze Game - {ALGORITHM}")
 
