@@ -2,12 +2,12 @@ import pygame
 import random
 BG_COLOR = (0, 0, 0)
 WALL_COLOR = (66, 245, 72)
-WALL_THICKNESS = 1
+WALL_THICKNESS = 3
 SAFE_PLACE_COLOR = (9, 0, 64)
 EXIT_COLOR = (0, 0, 255)
 PLAYER_COLOR = (255, 215, 0)
 GHOST_COLOR = (255, 0, 0)
-GENERATE_SPEED = 0.025
+GENERATE_SPEED = 0.05
 from logic.graph import Graph
 from logic.mazegenerator import maze_generator
 from graphic.core import init_window

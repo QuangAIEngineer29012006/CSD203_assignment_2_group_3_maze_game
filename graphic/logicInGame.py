@@ -66,8 +66,6 @@ def update_ghost(ghost, player, graph, size, safe_places=None, target_dict=None,
     if path and len(path) > 1:
         gx, gy = map(int, path[1].split(','))
         ghost.pos_x, ghost.pos_y = gx, gy
-        # Debug: Log movement and path distance
-        # print(f"Ghost {ghost_index} at {ghost_cell} moving to ({gx},{gy}) toward {target}, path length: {len(path)}, path distance to player: {path_distance}, chasing: {path_distance <= 5}")
 
 def get_random_safe_places(size, count=20):
     fixed = set()

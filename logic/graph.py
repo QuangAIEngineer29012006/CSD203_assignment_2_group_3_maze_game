@@ -48,6 +48,21 @@ class Graph:
         random.shuffle(connections)
         return connections
 
+    def manhattan(self, pos1, pos2):
+        if isinstance(pos1, list):
+            x1, y1 = pos1
+        elif isinstance(pos1, tuple):
+            x1, y1 = pos1
+        else:
+            x1, y1 = map(int, pos1.split(','))
+        if isinstance(pos2, list):
+            x2, y2 = pos2
+        elif isinstance(pos2, tuple):
+            x2, y2 = pos2
+        else:
+            x2, y2 = map(int, pos2.split(','))
+        return abs(x1 - x2) + abs(y1 - y2)
+
 
     def prim(self, start, size ):
         self.build_steps = []
@@ -117,6 +132,38 @@ class Graph:
                     self.build_steps.append((vertex, neighbor))
                     self.dfs(neighbor, size, visited)
 
+
+
+
+
+    def bfs(self, start, size):
+        # Generate spanning tree using randomized BFS
+        self.build_steps = []
+        visited = set()
+        queue = deque([start])
+        visited.add(start)
+        print(f"Starting BFS from {start}")
+
+        while queue:
+            # Randomize the order of processing current level
+            current_level = list(queue)
+            random.shuffle(current_level)
+            for current in current_level:
+                queue.remove(current)
+                neighbors = self.get_potential_connection(current, size)
+                if neighbors:
+                    random.shuffle(neighbors)
+                    for neighbor in neighbors:
+                        if neighbor in self.vertices_list[current] and neighbor not in visited:
+                            visited.add(neighbor)
+                            self.build_steps.append((current, neighbor))
+                            queue.append(neighbor)
+        # Rebuild graph with spanning tree edges and random weights
+        final_edges = self.build_steps
+        self.vertices_list = {}
+        for u, v in final_edges:
+            self.add_edge(u, v, random.randint(1, 5))
+        print(f"Rebuilt graph with {len(self.vertices_list)} vertices and {sum(len(edges) for edges in self.vertices_list.values()) // 2} edges")
     def bfs_path(self, start, goal):
         queue = deque([[start]])
         visited = set([start])

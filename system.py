@@ -10,7 +10,7 @@ from graphic.init import game_loop
 from graphic.logicInGame import get_random_safe_places
 
 def start_game(ALGORITHM='kruskal', MAZE_SIZE=30):
-    CELL_SIZE = 10
+    CELL_SIZE = 30
     WINDOW_MARGIN = 20
     win_size = MAZE_SIZE * CELL_SIZE
     screen = init_window(win_size, win_size, f"Maze Game - {ALGORITHM}")
