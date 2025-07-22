@@ -106,10 +106,9 @@ class Graph:
                 self.add_edge(vertex,i,1)
                 self.build_steps.append((vertex,i))
                 self.dfs(i,size,visited)
-    def A_star(self): #tam
-        pass
     def kurskal(self,size): #vinh        
         pass
+
 
 
     def wilson(self,root, size):
