@@ -1,54 +1,54 @@
 from logic.graph import Graph
 import random
-def maze_generator_hunt_and_kill(size):
-    maze = Graph()
-    col = random.randint(1,size)
-    row = random.randint(1,size)
-    vertex = f'{row},{col}'
-    maze.add_grid(size)
-    maze.hunt_and_kill(vertex, size)
-    return maze
+from collections import deque
 
 def maze_generator_dfs(size):
     maze = Graph()
-    col = random.randint(1,size)
-    row = random.randint(1,size)
-    vertex = f'{row},{col}'
     maze.add_grid(size)
-    maze.dfs(vertex,size)
+    col = random.randint(0, size-1)
+    row = random.randint(0, size-1)
+    vertex = f'{row},{col}'
+    maze.dfs(vertex, size)
+    final_edges = maze.build_steps
+    maze.vertices_list = {}
+    for u, v in final_edges:
+        maze.add_edge(u, v, 1)  # Use fixed weight 1
+    maze = maze.delete_random_edges(size)
     return maze
+
 def maze_generator_prim(size):
     maze = Graph()
-    col = random.randint(1,size)
-    row = random.randint(1,size)
-    vertex = f'{row},{col}'
     maze.add_grid(size)
-    maze.prim(vertex,size)
+    col = random.randint(0, size-1)
+    row = random.randint(0, size-1)
+    vertex = f'{row},{col}'
+    maze.prim(vertex, size)
+    final_edges = maze.build_steps
+    maze.vertices_list = {}
+    for u, v in final_edges:
+        maze.add_edge(u, v, 1)  # Use fixed weight 1
+    maze = maze.delete_random_edges(size)
     return maze
-def maze_generator_kurskal(size):
-    maze = Graph()
-    maze.kurskal(size)
-    return maze
-def maze_generator_wilson(size):
+
+def maze_generator_kruskal(size):
     maze = Graph()
     maze.add_grid(size)
-    col = random.randint(1,size)
-    row = random.randint(1,size)
-    vertex = f'{row},{col}'
-    maze.wilson(vertex, size)
+    maze.kruskal(size)
+    final_edges = maze.build_steps
+    maze.vertices_list = {}
+    for u, v in final_edges:
+        maze.add_edge(u, v, 1)  # Use fixed weight 1
+    maze = maze.delete_random_edges(size)
     return maze
-def maze_generator(size, algorithm='kurskal'):
-    if algorithm == 'hunt_and_kill':
-        return maze_generator_hunt_and_kill(size)
-    elif algorithm == 'dfs':
-        return maze_generator_dfs(size)
+
+def maze_generator(size, algorithm='kruskal'):
+    if algorithm == 'dfs':
+        maze = maze_generator_dfs(size)
     elif algorithm == 'prim':
-        return maze_generator_prim(size)
-    elif algorithm == 'kurskal':
-        return maze_generator_kurskal(size)
-    elif algorithm == 'wilson':
-       return maze_generator_wilson(size)
-    
+        maze = maze_generator_prim(size)
+    elif algorithm == 'kruskal':
+        maze = maze_generator_kruskal(size)
     else:
         raise ValueError(f"Unknown algorithm: {algorithm}")
-
+    print(f"Generated maze with {len(maze.build_steps)} edges, deleted {len(maze.deleted_edges)} edges")
+    return maze
